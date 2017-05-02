@@ -14,6 +14,9 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#"><img src="logo.png"></a>
         </div>
+        <ul class="nav navbar-nav" id="logout">
+          <li><a href="index.php">Logout</a></li>
+        </ul>
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Parkir</a></li>
           <li><a href="pelanggaran.php">Pelanggaran</a></li>
@@ -29,10 +32,6 @@
         <div class="form-parkir">
           <form>
             <div class="form-group">
-              <label for="no-kendaraan">No. Kendaraan</label>
-              <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
-            </div>
-            <div class="form-group">
               <label for="tempat-parkir">Tempat Parkir</label>
               <select class="form-control" name="tempat-parkir" id="tempat-parkir">
                 <option value="a"></option>
@@ -43,28 +42,13 @@
                 <option value="f">Rumah Gumi</option>
               </select>
             </div>
-            <br>
-            <input type="hidden" value="checkin">
-            <button type="submit" class="btn btn-primary">Check In</button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <br>
-    <!-- keluar parkir -->
-    <div class="row">
-      <div class="form-input col-md-12">
-        <h2>Keluar Parkir</h2>
-        <br>
-        <div class="form-parkir">
-          <form>
             <div class="form-group">
-              <label for="no-kendaraan">No. Kendaraan</label>
-              <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+              <label class="radio-inline"><input type="radio" name="type">Datang</label>
+              <label class="radio-inline"><input type="radio" name="type">Keluar</label>
             </div>
             <br>
-            <input type="hidden" value="checkout">
-            <button type="submit" class="btn btn-primary">Check Out</button>
+            <input type="hidden" value="checkin">
+            <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
       </div>
@@ -93,6 +77,10 @@
   }
   button {
     width: 100px;
+  }
+  #logout {
+    float: right;
+    background-color: rgba(255,255,255,0.05);
   }
 </style>
 

@@ -72,7 +72,7 @@
           <label for="password">Password</label>
           <input type="password" class="form-control" id="password" name="password">
         </div>
-        <div class="form-group">
+        <div class="form-group center-button">
           <button class="btn btn-lg btn-primary text-right">Login</button>
         </div>
       </form>
@@ -107,6 +107,13 @@
     font-size: 1.5em;
   }
   form input {
+    text-align: center;
+  }
+  button {
+    width: 100px;
+  }
+  .center-button {
+    display: block;
     text-align: center;
   }
 </style>

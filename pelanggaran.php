@@ -14,6 +14,9 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#"><img src="logo.png"></a>
         </div>
+        <ul class="nav navbar-nav" id="logout">
+          <li><a href="index.php">Logout</a></li>
+        </ul>
         <ul class="nav navbar-nav">
           <li><a href="parkir.php">Parkir</a></li>
           <li class="active"><a href="#">Pelanggaran</a></li>
@@ -66,6 +69,10 @@
   }
   button {
     width: 100px;
+  }
+  #logout {
+    float: right;
+    background-color: rgba(255,255,255,0.05);
   }
 </style>
 
