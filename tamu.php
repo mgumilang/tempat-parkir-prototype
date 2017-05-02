@@ -2,7 +2,7 @@
 <DOCTYPE! html>
 <html>
   <header>
-    <title> xxx | Parkir Umum </title>
+    <title> xxx | Parkir Tamu </title>
     <meta charset = "UTF-8">
 		<meta name = "viewport" content = "width = device-width, initial-scale = 1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -15,9 +15,9 @@
           <a class="navbar-brand" href="#"><img src="logo.png"></a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Umum</a></li>
+          <li><a href="umum.php">Umum</a></li>
           <li><a href="staff.php">Staff</a></li>
-          <li><a href="tamu.php">Tamu</a></li>
+          <li class="active"><a href="#">Tamu</a></li>
         </ul>
       </div>
     </nav>
@@ -43,6 +43,22 @@
                     <input type="number" class="form-control" id="menit-datang" name="menit-datang" min="0" max="59" placeholder="Menit">
                   </div>
                 </div>
+              </div>
+              <div class="form-group">
+                <label for="id-tamu">ID</label>
+                <input type="text" class="form-control" id="id-tamu" name="id-tamu">
+              </div>
+              <div class="form-group">
+                <label for="instansi">Instansi</label>
+                <input type="text" class="form-control" id="instansi" name="instansi">
+              </div>
+              <div class="form-group">
+                <label for="kepentingan">Kepentingan</label>
+                <input type="text" class="form-control" id="kepentingan" name="kepentingan">
+              </div>
+              <div class="form-group">
+                <label for="no-telp">No. Telp</label>
+                <input type="text" class="form-control" id="no-telp" name="no-telp">
               </div>
               <br>
               <button type="submit" class="btn btn-default">Submit</button>

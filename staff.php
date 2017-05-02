@@ -2,7 +2,7 @@
 <DOCTYPE! html>
 <html>
   <header>
-    <title> xxx | Parkir Umum </title>
+    <title> xxx | Parkir Staff </title>
     <meta charset = "UTF-8">
 		<meta name = "viewport" content = "width = device-width, initial-scale = 1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -15,9 +15,9 @@
           <a class="navbar-brand" href="#"><img src="logo.png"></a>
         </div>
         <ul class="nav navbar-nav">
-          <li><a href="#">Umum</a></li>
+          <li><a href="umum.php">Umum</a></li>
           <li class="active"><a href="#">Staff</a></li>
-          <li><a href="#">Tamu</a></li>
+          <li><a href="tamu.php">Tamu</a></li>
         </ul>
       </div>
     </nav>
