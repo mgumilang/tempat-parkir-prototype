@@ -1,271 +1,335 @@
--- MySQL dump 10.13  Distrib 5.7.18, for osx10.12 (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
--- Host: localhost    Database: parkir
--- ------------------------------------------------------
--- Server version	5.7.17
+-- Host: 127.0.0.1
+-- Generation Time: May 02, 2017 at 04:04 PM
+-- Server version: 10.1.16-MariaDB
+-- PHP Version: 7.0.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Table structure for table `Lokasi`
+-- Database: `parkir`
 --
 
-DROP TABLE IF EXISTS `Lokasi`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Lokasi` (
-  `LokasiID` int(11) NOT NULL AUTO_INCREMENT,
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lokasi`
+--
+
+CREATE TABLE `lokasi` (
+  `LokasiID` int(11) NOT NULL,
   `Lokasi` varchar(50) DEFAULT NULL,
   `Kapasitas` int(11) DEFAULT NULL,
   `Slot` int(11) DEFAULT NULL,
+  `SatpamID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `lokasi`
+--
+
+INSERT INTO `lokasi` (`LokasiID`, `Lokasi`, `Kapasitas`, `Slot`, `SatpamID`) VALUES
+(1, 'Labtek V', 10, 10, 1),
+(2, 'Labtek VIII', 10, 10, 2),
+(3, 'GKU Timur', 10, 10, 3),
+(4, 'Aula Barat', 10, 10, 4),
+(5, 'Aula Timur', 10, 10, 5),
+(6, 'SBM', 10, 10, 6),
+(7, 'PLN', 10, 10, 7);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mahasiswaumum`
+--
+
+CREATE TABLE `mahasiswaumum` (
+  `NomorPlat` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pelanggaran`
+--
+
+CREATE TABLE `pelanggaran` (
+  `PelanggaranID` int(11) NOT NULL,
   `SatpamID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`LokasiID`),
-  KEY `SatpamID` (`SatpamID`),
-  CONSTRAINT `lokasi_ibfk_1` FOREIGN KEY (`SatpamID`) REFERENCES `Satpam` (`SatpamID`)
+  `Status` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `Lokasi`
+-- Table structure for table `petugas`
 --
 
-LOCK TABLES `Lokasi` WRITE;
-/*!40000 ALTER TABLE `Lokasi` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Lokasi` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Pelanggaran`
---
-
-DROP TABLE IF EXISTS `Pelanggaran`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Pelanggaran` (
-  `PelanggaranID` int(11) NOT NULL AUTO_INCREMENT,
-  `SatpamID` int(11) DEFAULT NULL,
-  `Status` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`PelanggaranID`),
-  KEY `SatpamID` (`SatpamID`),
-  CONSTRAINT `pelanggaran_ibfk_1` FOREIGN KEY (`SatpamID`) REFERENCES `Satpam` (`SatpamID`)
+CREATE TABLE `petugas` (
+  `PetugasID` int(11) NOT NULL,
+  `Name` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `Pelanggaran`
+-- Table structure for table `satpam`
 --
 
-LOCK TABLES `Pelanggaran` WRITE;
-/*!40000 ALTER TABLE `Pelanggaran` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Pelanggaran` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Petugas`
---
-
-DROP TABLE IF EXISTS `Petugas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Petugas` (
-  `PetugasID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`PetugasID`)
+CREATE TABLE `satpam` (
+  `SatpamID` int(11) NOT NULL,
+  `Nama` varchar(50) DEFAULT NULL,
+  `Telepon` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Petugas`
+-- Dumping data for table `satpam`
 --
 
-LOCK TABLES `Petugas` WRITE;
-/*!40000 ALTER TABLE `Petugas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Petugas` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `satpam` (`SatpamID`, `Nama`, `Telepon`) VALUES
+(1, 'Atep Suratep', '085656565656'),
+(2, 'Tatang Suratang', '081008811'),
+(3, 'Jajat Sudrajat', '0227515751'),
+(4, 'Dadang Daradang', '12345678'),
+(5, 'Tuti Tukang Tipu', '09909009'),
+(6, 'Atep Suratep', '666666'),
+(7, 'Nicki Minaj', '69696969');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `Satpam`
+-- Table structure for table `staff`
 --
 
-DROP TABLE IF EXISTS `Satpam`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Satpam` (
-  `SatpamID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `staff` (
+  `StaffID` int(11) NOT NULL,
   `Nama` varchar(50) DEFAULT NULL,
   `Telepon` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`SatpamID`)
+  `Kepentingan` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `Satpam`
+-- Table structure for table `tamu`
 --
 
-LOCK TABLES `Satpam` WRITE;
-/*!40000 ALTER TABLE `Satpam` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Satpam` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Staff`
---
-
-DROP TABLE IF EXISTS `Staff`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Staff` (
-  `StaffID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tamu` (
+  `TamuID` int(11) NOT NULL,
   `Nama` varchar(50) DEFAULT NULL,
   `Telepon` varchar(50) DEFAULT NULL,
   `Kepentingan` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`StaffID`)
+  `Instansi` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `Staff`
+-- Table structure for table `transaksimahasiswaumum`
 --
 
-LOCK TABLES `Staff` WRITE;
-/*!40000 ALTER TABLE `Staff` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Staff` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Tamu`
---
-
-DROP TABLE IF EXISTS `Tamu`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Tamu` (
-  `TamuID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nama` varchar(50) DEFAULT NULL,
-  `Telepon` varchar(50) DEFAULT NULL,
-  `Kepentingan` varchar(50) DEFAULT NULL,
-  `Instansi` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`TamuID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Tamu`
---
-
-LOCK TABLES `Tamu` WRITE;
-/*!40000 ALTER TABLE `Tamu` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Tamu` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `TransaksiMahasiswaUmum`
---
-
-DROP TABLE IF EXISTS `TransaksiMahasiswaUmum`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TransaksiMahasiswaUmum` (
-  `TransaksiMahasiswaUmumID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `transaksimahasiswaumum` (
+  `TransaksiMahasiswaUmumID` int(11) NOT NULL,
   `JamMasuk` datetime DEFAULT NULL,
   `JamKeluar` datetime DEFAULT NULL,
   `Tagihan` int(11) DEFAULT NULL,
   `PetugasID` int(11) DEFAULT NULL,
-  `NomorPlat` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`TransaksiMahasiswaUmumID`),
-  KEY `PetugasID` (`PetugasID`),
-  CONSTRAINT `transaksimahasiswaumum_ibfk_1` FOREIGN KEY (`PetugasID`) REFERENCES `Petugas` (`PetugasID`)
+  `NomorPlat` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `TransaksiMahasiswaUmum`
+-- Table structure for table `transaksistafftamu`
 --
 
-LOCK TABLES `TransaksiMahasiswaUmum` WRITE;
-/*!40000 ALTER TABLE `TransaksiMahasiswaUmum` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TransaksiMahasiswaUmum` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `TransaksiStaffTamu`
---
-
-DROP TABLE IF EXISTS `TransaksiStaffTamu`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TransaksiStaffTamu` (
-  `TransaksiStaffTamuID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `transaksistafftamu` (
+  `TransaksiStaffTamuID` int(11) NOT NULL,
   `JamMasuk` datetime DEFAULT NULL,
   `JamKeluar` datetime DEFAULT NULL,
   `StaffID` int(11) DEFAULT NULL,
   `TamuID` int(11) DEFAULT NULL,
   `PetugasID` int(11) DEFAULT NULL,
   `LokasiID` int(11) DEFAULT NULL,
-  `PelanggaranID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`TransaksiStaffTamuID`),
-  KEY `StaffID` (`StaffID`),
-  KEY `TamuID` (`TamuID`),
-  KEY `PetugasID` (`PetugasID`),
-  KEY `LokasiID` (`LokasiID`),
-  KEY `PelanggaranID` (`PelanggaranID`),
-  CONSTRAINT `transaksistafftamu_ibfk_1` FOREIGN KEY (`StaffID`) REFERENCES `Staff` (`StaffID`),
-  CONSTRAINT `transaksistafftamu_ibfk_2` FOREIGN KEY (`TamuID`) REFERENCES `Tamu` (`TamuID`),
-  CONSTRAINT `transaksistafftamu_ibfk_3` FOREIGN KEY (`PetugasID`) REFERENCES `Petugas` (`PetugasID`),
-  CONSTRAINT `transaksistafftamu_ibfk_4` FOREIGN KEY (`LokasiID`) REFERENCES `Lokasi` (`LokasiID`),
-  CONSTRAINT `transaksistafftamu_ibfk_5` FOREIGN KEY (`PelanggaranID`) REFERENCES `Pelanggaran` (`PelanggaranID`)
+  `PelanggaranID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `TransaksiStaffTamu`
+-- Table structure for table `users`
 --
 
-LOCK TABLES `TransaksiStaffTamu` WRITE;
-/*!40000 ALTER TABLE `TransaksiStaffTamu` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TransaksiStaffTamu` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Users`
---
-
-DROP TABLE IF EXISTS `Users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Users` (
-  `UserID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `UserID` int(11) NOT NULL,
   `Username` varchar(50) DEFAULT NULL,
-  `Password` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `Password` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `Users`
+-- Indexes for dumped tables
 --
 
-LOCK TABLES `Users` WRITE;
-/*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+--
+-- Indexes for table `lokasi`
+--
+ALTER TABLE `lokasi`
+  ADD PRIMARY KEY (`LokasiID`),
+  ADD KEY `SatpamID` (`SatpamID`);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Indexes for table `mahasiswaumum`
+--
+ALTER TABLE `mahasiswaumum`
+  ADD PRIMARY KEY (`NomorPlat`);
+
+--
+-- Indexes for table `pelanggaran`
+--
+ALTER TABLE `pelanggaran`
+  ADD PRIMARY KEY (`PelanggaranID`),
+  ADD KEY `SatpamID` (`SatpamID`);
+
+--
+-- Indexes for table `petugas`
+--
+ALTER TABLE `petugas`
+  ADD PRIMARY KEY (`PetugasID`);
+
+--
+-- Indexes for table `satpam`
+--
+ALTER TABLE `satpam`
+  ADD PRIMARY KEY (`SatpamID`);
+
+--
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+  ADD PRIMARY KEY (`StaffID`);
+
+--
+-- Indexes for table `tamu`
+--
+ALTER TABLE `tamu`
+  ADD PRIMARY KEY (`TamuID`);
+
+--
+-- Indexes for table `transaksimahasiswaumum`
+--
+ALTER TABLE `transaksimahasiswaumum`
+  ADD PRIMARY KEY (`TransaksiMahasiswaUmumID`),
+  ADD KEY `PetugasID` (`PetugasID`),
+  ADD KEY `NomorPlat` (`NomorPlat`);
+
+--
+-- Indexes for table `transaksistafftamu`
+--
+ALTER TABLE `transaksistafftamu`
+  ADD PRIMARY KEY (`TransaksiStaffTamuID`),
+  ADD KEY `StaffID` (`StaffID`),
+  ADD KEY `TamuID` (`TamuID`),
+  ADD KEY `PetugasID` (`PetugasID`),
+  ADD KEY `LokasiID` (`LokasiID`),
+  ADD KEY `PelanggaranID` (`PelanggaranID`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`UserID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `lokasi`
+--
+ALTER TABLE `lokasi`
+  MODIFY `LokasiID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `pelanggaran`
+--
+ALTER TABLE `pelanggaran`
+  MODIFY `PelanggaranID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `petugas`
+--
+ALTER TABLE `petugas`
+  MODIFY `PetugasID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `satpam`
+--
+ALTER TABLE `satpam`
+  MODIFY `SatpamID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `staff`
+--
+ALTER TABLE `staff`
+  MODIFY `StaffID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `tamu`
+--
+ALTER TABLE `tamu`
+  MODIFY `TamuID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `transaksimahasiswaumum`
+--
+ALTER TABLE `transaksimahasiswaumum`
+  MODIFY `TransaksiMahasiswaUmumID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `transaksistafftamu`
+--
+ALTER TABLE `transaksistafftamu`
+  MODIFY `TransaksiStaffTamuID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `lokasi`
+--
+ALTER TABLE `lokasi`
+  ADD CONSTRAINT `lokasi_ibfk_1` FOREIGN KEY (`SatpamID`) REFERENCES `satpam` (`SatpamID`);
+
+--
+-- Constraints for table `pelanggaran`
+--
+ALTER TABLE `pelanggaran`
+  ADD CONSTRAINT `pelanggaran_ibfk_1` FOREIGN KEY (`SatpamID`) REFERENCES `satpam` (`SatpamID`);
+
+--
+-- Constraints for table `transaksimahasiswaumum`
+--
+ALTER TABLE `transaksimahasiswaumum`
+  ADD CONSTRAINT `transaksimahasiswaumum_ibfk_1` FOREIGN KEY (`PetugasID`) REFERENCES `petugas` (`PetugasID`);
+
+--
+-- Constraints for table `transaksistafftamu`
+--
+ALTER TABLE `transaksistafftamu`
+  ADD CONSTRAINT `transaksistafftamu_ibfk_1` FOREIGN KEY (`StaffID`) REFERENCES `staff` (`StaffID`),
+  ADD CONSTRAINT `transaksistafftamu_ibfk_2` FOREIGN KEY (`TamuID`) REFERENCES `tamu` (`TamuID`),
+  ADD CONSTRAINT `transaksistafftamu_ibfk_3` FOREIGN KEY (`PetugasID`) REFERENCES `petugas` (`PetugasID`),
+  ADD CONSTRAINT `transaksistafftamu_ibfk_4` FOREIGN KEY (`LokasiID`) REFERENCES `lokasi` (`LokasiID`),
+  ADD CONSTRAINT `transaksistafftamu_ibfk_5` FOREIGN KEY (`PelanggaranID`) REFERENCES `pelanggaran` (`PelanggaranID`);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-05-02 17:18:14
