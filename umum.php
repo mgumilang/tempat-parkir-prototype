@@ -1,3 +1,55 @@
+<?php
+  session_start();
+
+  // CREATE USER 'parkir'@'localhost' IDENTIFIED BY 'parkir';
+  // CREATE DATBASE parkir;
+  // GRANT ALL PRIVILEGES ON parkir.* TO 'parkir'@'localhost' WITH GRANT OPTION;
+  $servername = "localhost";
+  $username = "parkir";
+  $password = "parkir";
+  $dbname = "parkir";
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_POST['type'] == "datang") {
+    	date_default_timezone_set('Asia/Jakarta');
+    	$datex = date('Y-m-d H:i:s');
+      $noplat = $_POST['no-kendaraan'];
+      $result = $conn->query("
+        INSERT INTO transaksimahasiswaumum(JamMasuk, NomorPlat, PetugasID)
+        VALUES ('$datex', '$noplat', 1)
+      ");
+    } else if ($_POST['type'] == "keluar") {
+    	date_default_timezone_set('Asia/Jakarta');
+      $datex = date('Y-m-d H:i:s');
+      $noplat = $_POST['no-kendaraan'];
+      $waktudatang = $conn->query("
+        SELECT JamMasuk
+        FROM transaksimahasiswaumum
+        WHERE NomorPlat = '$noplat'
+        ORDER BY JamMasuk DESC
+        LIMIT 1
+      ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
+      $tagihan = (idate('d', strtotime($datex)) - idate('d',strtotime($waktudatang)) + 1) * 2000;
+      $sql = "
+        UPDATE transaksimahasiswaumum
+        SET JamKeluar = '$datex', Tagihan = '$tagihan'
+        WHERE NomorPlat = '$noplat' AND JamMasuk = '$waktudatang'
+      ";
+      if (mysqli_query($conn, $sql)) {
+      } else {
+          echo "Error updating record: " . mysqli_error($conn);
+      }
+    }
+
+    $conn->close();
+  }
+?>
+
 <!-- html section -->
 <DOCTYPE! html>
 <html>
@@ -14,6 +66,9 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#"><img src="logo.png"></a>
         </div>
+        <ul class="nav navbar-nav" id="logout">
+          <li><a href="index.php">Logout</a></li>
+        </ul>
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Umum</a></li>
           <li><a href="staff.php">Staff</a></li>
@@ -28,7 +83,7 @@
           <h2>Datang</h2>
           <br>
           <div class="form-datang">
-            <form>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
               <div class="form-group">
                 <label for="no-kendaraan">No. Kendaraan</label>
                 <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
@@ -45,6 +100,7 @@
                 </div>
               </div>
               <br>
+              <input type="hidden" name="type" value="datang">
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
           </div>
@@ -54,7 +110,7 @@
         <div class="form-input col-md-12">
           <h2>Keluar</h2><br>
           <div class="form-datang">
-            <form>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
               <div class="form-group">
                 <label for="no-kendaraan">No. Kendaraan</label>
                 <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
@@ -71,6 +127,7 @@
                 </div>
               </div>
               <br>
+              <input type="hidden" name="type" value="keluar">
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
           </div>
@@ -102,6 +159,10 @@
   .waktu-input {
     width: 100%;
     margin-left: -15px;
+  }
+  #logout {
+    float: right;
+    background-color: rgba(255,255,255,0.05);
   }
 </style>
 
