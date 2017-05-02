@@ -1,3 +1,46 @@
+<?php
+  session_start();
+
+  // CREATE USER 'parkir'@'localhost' IDENTIFIED BY 'parkir';
+  // CREATE DATBASE parkir;
+  // GRANT ALL PRIVILEGES ON parkir.* TO 'parkir'@'localhost' WITH GRANT OPTION;
+  $servername = "localhost";
+  $username = "parkir";
+  $password = "parkir";
+  $dbname = "parkir";
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  if (isset($_SESSION['username'])) { // already logged in
+    header('Location: parkir.php');
+    $conn->close();
+    die();
+  }
+
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $user_id = $conn->query("
+      SELECT UserID FROM Users
+      WHERE Username = '$username' AND Password = '$password'
+    ")->fetch_array(MYSQLI_ASSOC)['UserID'];
+
+    if ($user_id) { // logged in
+      $_SESSION['username'] = $username;
+      header("Location: parkir.php");
+      $conn->close();
+      die();
+    } else {
+      $error = true;
+    }
+    $conn->close();
+  }
+?>
+
 <!-- html section -->
 <DOCTYPE! html>
 <html>
@@ -20,7 +63,7 @@
 
     <!-- login -->
     <div class="login">
-      <form>
+      <form method="POST" action="index.php">
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" class="form-control" id="username" name="username">
@@ -28,6 +71,9 @@
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary text-right">Login</button>
         </div>
       </form>
     </div>
