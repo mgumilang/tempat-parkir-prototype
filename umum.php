@@ -14,6 +14,8 @@
     die("Connection failed: " . $conn->connect_error);
   }
 
+  $tagihan = false;
+
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['type'] == "datang") {
     	date_default_timezone_set('Asia/Jakarta');
@@ -45,6 +47,7 @@
           echo "Error updating record: " . mysqli_error($conn);
       }
     }
+
     $conn->close();
   }
 ?>
@@ -133,6 +136,17 @@
         </div>
       </div>
     </div>
+    <br>
+    <br>
+    <center class="tagihan">
+      <?php
+        if ($tagihan) {
+      ?>
+          <h2>Tagihan: Rp <?php echo $tagihan ?></h2>
+      <?php
+        }
+      ?>
+    </center>
   </body>
 </html>
 
