@@ -1,3 +1,22 @@
+<?php
+  session_start();
+
+  // CREATE USER 'parkir'@'localhost' IDENTIFIED BY 'parkir';
+  // CREATE DATBASE parkir;
+  // GRANT ALL PRIVILEGES ON parkir.* TO 'parkir'@'localhost' WITH GRANT OPTION;
+  $servername = "localhost";
+  $username = "parkir";
+  $password = "parkir";
+  $dbname = "parkir";
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+
+?>
+
 <!-- html section -->
 <DOCTYPE! html>
 <html>
@@ -34,12 +53,15 @@
             <div class="form-group">
               <label for="tempat-parkir">Tempat Parkir</label>
               <select class="form-control" name="tempat-parkir" id="tempat-parkir">
-                <option value="a"></option>
-                <option value="b"></option>
-                <option value="c"></option>
-                <option value="d">Gubuk Azka</option>
-                <option value="e">Rumah Rangga</option>
-                <option value="f">Rumah Gumi</option>
+                <?php
+                  $result = $conn->query("SELECT Lokasi FROM lokasi ORDER BY Lokasi");
+
+                  if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                      echo "<option value=" . $row['Lokasi'] . ">" . $row['Lokasi'] . "</option>";
+                    }
+                  }
+                ?>
               </select>
             </div>
             <div class="form-group">
@@ -47,7 +69,6 @@
               <label class="radio-inline"><input type="radio" name="type">Keluar</label>
             </div>
             <br>
-            <input type="hidden" value="checkin">
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
