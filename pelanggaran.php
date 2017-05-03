@@ -14,7 +14,21 @@
     die("Connection failed: " . $conn->connect_error);
   }
 
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $status = $_POST['status'];
+    $result = $conn->query("INSERT INTO pelanggaran(SatpamID, Status)
+      VALUES (1, '$status')
+    ");
 
+    $id = $conn->query("SELECT PelanggaranID FROM pelanggaran ORDER BY PelanggaranID DESC LIMIT 1")->fetch_array(MYSQLI_ASSOC)['PelanggaranID'];
+    echo $id;
+    $idtrans = $_POST['ID'];
+    $result = $conn->query("UPDATE transaksistafftamu
+      SET PelanggaranID = '$id'
+      WHERE TransaksiStaffTamuID = '$idtrans'
+    ");
+    if ($result)
+  }
 ?>
 
 <!-- html section -->
@@ -49,10 +63,10 @@
         <h2>Pelanggaran</h2>
         <br>
         <div class="form-parkir">
-          <form>
+          <form method="POST" action="pelanggaran.php">
             <div class="form-group">
-              <label for="no-kendaraan">ID</label>
-              <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+              <label for="ID">ID</label>
+              <input type="text" class="form-control" id="ID" name="ID">
             </div>
             <div class="form-group">
               <label for="pelanggaran">Status Pelanggaran</label>
@@ -80,7 +94,7 @@
         <h2>Daftar Pelru Dikunci</h2>
         <br>
         <div class="container-fluid">
-          <table>
+          <table class="table-condensed table-hover">
             <thead>
               <tr>
                 <th>ID</th>
@@ -93,7 +107,14 @@
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
                   echo "<td>" . $row['TransaksiStaffTamuID'] . "</td>";
-                  echo "<td>" . $row['StaffID'] . "</td>";
+                  if ($row["StaffID"] != "") {
+                    $id = $row["StaffID"];
+                    $telp = $conn->query("SELECT Telepon FROM staff WHERE StaffID = $id")->fetch_array(MYSQLI_ASSOC)['Telepon'];
+                  } else if ($row["TamuID"] != "") {
+                    $id = $row["TamuID"];
+                    $telp = $conn->query("SELECT Telepon FROM tamu WHERE ID = $id")->fetch_array(MYSQLI_ASSOC)['Telepon'];
+                  }
+                  echo "<td>" . $telp . "</td>";
                   echo "</tr>";
                 }
               ?>
