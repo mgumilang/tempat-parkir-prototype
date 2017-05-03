@@ -75,6 +75,7 @@
           <li class="active"><a href="#">Umum</a></li>
           <li><a href="staff.php">Staff</a></li>
           <li><a href="tamu.php">Tamu</a></li>
+          <li><a href="daftarpelanggaran.php">Pelanggaran</a></li>
         </ul>
       </div>
     </nav>

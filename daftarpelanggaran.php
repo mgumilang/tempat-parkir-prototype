@@ -33,7 +33,7 @@
 <DOCTYPE! html>
 <html>
   <header>
-    <title> xxx | Pelanggaran Kendaraan </title>
+    <title> xxx | Daftar Pelanggaran Kendaraan </title>
     <meta charset = "UTF-8">
 		<meta name = "viewport" content = "width = device-width, initial-scale = 1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -49,7 +49,9 @@
           <li><a href="index.php">Logout</a></li>
         </ul>
         <ul class="nav navbar-nav">
-          <li><a href="parkir.php">Parkir</a></li>
+          <li><a href="umum.php">Umum</a></li>
+          <li><a href="staff.php">Staff</a></li>
+          <li><a href="tamu.php">Tamu</a></li>
           <li class="active"><a href="#">Pelanggaran</a></li>
         </ul>
       </div>
@@ -61,7 +63,7 @@
         <h2>Pelanggaran</h2>
         <br>
         <div class="form-parkir">
-          <form method="POST" action="pelanggaran.php">
+          <form method="POST" action="daftarpelanggaran.php">
             <div class="form-group">
               <label for="ID">ID</label>
               <input type="text" class="form-control" id="ID" name="ID">
@@ -89,7 +91,7 @@
     <!-- Daftar pelanggaran -->
     <div class="row">
       <div class="form-input col-md-12">
-        <h2>Daftar Pelru Dikunci</h2>
+        <h2>Daftar Pelanggaran</h2>
         <br>
         <div class="container-fluid">
           <table class="table-condensed table-hover">
@@ -97,11 +99,12 @@
               <tr>
                 <th>ID</th>
                 <th>No. Telepon</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <?php
-                $result = $conn->query("SELECT * FROM transaksistafftamu NATURAL JOIN pelanggaran WHERE Status = 'Perlu dikunci'");
+                $result = $conn->query("SELECT * FROM transaksistafftamu NATURAL JOIN pelanggaran");
                 while ($row = $result->fetch_assoc()) {
                   echo "<tr>";
                   echo "<td>" . $row['TransaksiStaffTamuID'] . "</td>";
@@ -113,6 +116,7 @@
                     $telp = $conn->query("SELECT Telepon FROM tamu WHERE ID = $id")->fetch_array(MYSQLI_ASSOC)['Telepon'];
                   }
                   echo "<td>" . $telp . "</td>";
+                  echo "<td>" . $row['Status'] . "</td>";
                   echo "</tr>";
                 }
               ?>

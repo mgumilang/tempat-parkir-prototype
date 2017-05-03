@@ -83,6 +83,7 @@
           <li><a href="umum.php">Umum</a></li>
           <li><a href="staff.php">Staff</a></li>
           <li class="active"><a href="#">Tamu</a></li>
+          <li><a href="daftarpelanggaran.php">Pelanggaran</a></li>
         </ul>
       </div>
     </nav>
