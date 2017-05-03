@@ -1,3 +1,51 @@
+<?php
+  session_start();
+
+  // CREATE USER 'parkir'@'localhost' IDENTIFIED BY 'parkir';
+  // CREATE DATBASE parkir;
+  // GRANT ALL PRIVILEGES ON parkir.* TO 'parkir'@'localhost' WITH GRANT OPTION;
+  $servername = "localhost";
+  $username = "parkir";
+  $password = "parkir";
+  $dbname = "parkir";
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_POST['type'] == "datang") {
+      echo 'tlol';
+    	date_default_timezone_set('Asia/Jakarta');
+    	$datex = date('Y-m-d H:i:s');
+      $staff_id = $_POST['id-staff'];
+      $kepentingan = $_POST['kepentingan'];
+
+      $res_tamu_transaksi = $conn->query("
+        INSERT INTO TransaksiStaffTamu(JamMasuk, StaffID, Kepentingan, PetugasID)
+        VALUES ('$datex', $staff_id, '$kepentingan', 1)
+      ");
+      echo 'horre';
+    } else if ($_POST['type'] == "keluar") {
+    	date_default_timezone_set('Asia/Jakarta');
+      $datex = date('Y-m-d H:i:s');
+      $staff_id = $_POST['id-staff'];
+
+      $sql = "
+        UPDATE TransaksiStaffTamu
+        SET JamKeluar = '$datex'
+        WHERE StaffID = $staff_id
+      ";
+      if (mysqli_query($conn, $sql)) {
+
+      } else {
+        echo "Error updating record: " . mysqli_error($conn);
+      }
+    }
+    $conn->close();
+  }
+?>
 <!-- html section -->
 <DOCTYPE! html>
 <html>
@@ -31,22 +79,7 @@
           <h2>Datang</h2>
           <br>
           <div class="form-datang">
-            <form>
-              <div class="form-group">
-                <label for="no-kendaraan">No. Kendaraan</label>
-                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
-              </div>
-              <div class="form-group">
-                <label for="jam-datang">Waktu Kedatangan</label><br>
-                <div class="row waktu-input">
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="jam-datang" name="jam-datang" min="0" max="23" placeholder="Jam">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="menit-datang" name="menit-datang" min="0" max="59" placeholder="Menit">
-                  </div>
-                </div>
-              </div>
+            <form method="POST" action="staff.php">
               <div class="form-group">
                 <label for="id-staff">ID Staff</label>
                 <input type="text" class="form-control" id="id-staff" name="id-staff">
@@ -55,6 +88,7 @@
                 <label for="kepentingan">Kepentingan</label>
                 <input type="text" class="form-control" id="kepentingan" name="kepentingan">
               </div>
+              <input type="hidden" name="type" value="datang">
               <br>
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
@@ -65,22 +99,12 @@
         <div class="form-input col-md-12">
           <h2>Keluar</h2><br>
           <div class="form-datang">
-            <form>
+            <form method="POST" action="staff.php">
               <div class="form-group">
-                <label for="no-kendaraan">No. Kendaraan</label>
-                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+                <label for="no-kendaraan">ID Staff</label>
+                <input type="text" class="form-control" id="id-staff" name="id-staff">
               </div>
-              <div class="form-group">
-                <label for="jam-keluar">Waktu Keluar</label><br>
-                <div class="row waktu-input">
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="jam-datang" name="jam-keluar" min="0" max="23" placeholder="Jam">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="menit-datang" name="menit-keluar" min="0" max="59" placeholder="Menit">
-                  </div>
-                </div>
-              </div>
+              <input type="hidden" name="type" value="keluar">
               <br>
               <button type="submit" class="btn btn-default">Submit</button>
             </form>

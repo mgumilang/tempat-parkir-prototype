@@ -1,3 +1,65 @@
+<?php
+  session_start();
+
+  // CREATE USER 'parkir'@'localhost' IDENTIFIED BY 'parkir';
+  // CREATE DATBASE parkir;
+  // GRANT ALL PRIVILEGES ON parkir.* TO 'parkir'@'localhost' WITH GRANT OPTION;
+  $servername = "localhost";
+  $username = "parkir";
+  $password = "parkir";
+  $dbname = "parkir";
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_POST['type'] == "datang") {
+    	date_default_timezone_set('Asia/Jakarta');
+    	$datex = date('Y-m-d H:i:s');
+      $tamu_id = $_POST['id-tamu'];
+      $nama = $_POST['nama'];
+      $instansi = $_POST['instansi'];
+      $kepentingan = $_POST['kepentingan'];
+      $no_telp = $_POST['no-telp'];
+
+      $res_tamu = $conn->query("
+        INSERT INTO Tamu(TamuID, Nama, Instansi, Telepon)
+        VALUES ('$tamu_id', '$nama', '$instansi', '$no_telp')
+      ");
+      if ($res_tamu) {
+        $last_id = $conn->insert_id;
+        $res_tamu_transaksi = $conn->query("
+          INSERT INTO TransaksiStaffTamu(JamMasuk, TamuID, Kepentingan, PetugasID)
+          VALUES ('$datex', $last_id, '$kepentingan', 1)
+        ");
+      }
+    } else if ($_POST['type'] == "keluar") {
+    	date_default_timezone_set('Asia/Jakarta');
+      $datex = date('Y-m-d H:i:s');
+      $tamu_id = $_POST['id-tamu'];
+
+      $id = $conn->query("
+        SELECT ID
+        FROM Tamu
+        WHERE TamuID = '$tamu_id'
+      ")->fetch_array(MYSQLI_ASSOC)['ID'];
+
+      $sql = "
+        UPDATE TransaksiStaffTamu
+        SET JamKeluar = '$datex'
+        WHERE TamuID = $id
+      ";
+      if (mysqli_query($conn, $sql)) {
+
+      } else {
+        echo "Error updating record: " . mysqli_error($conn);
+      }
+    }
+    $conn->close();
+  }
+?>
 <!-- html section -->
 <DOCTYPE! html>
 <html>
@@ -31,25 +93,14 @@
           <h2>Datang</h2>
           <br>
           <div class="form-datang">
-            <form>
+            <form method="POST" action="tamu.php">
               <div class="form-group">
-                <label for="no-kendaraan">No. Kendaraan</label>
-                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
-              </div>
-              <div class="form-group">
-                <label for="jam-datang">Waktu Kedatangan</label><br>
-                <div class="row waktu-input">
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="jam-datang" name="jam-datang" min="0" max="23" placeholder="Jam">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="menit-datang" name="menit-datang" min="0" max="59" placeholder="Menit">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="id-tamu">ID</label>
+                <label for="id-tamu">Tamu ID</label>
                 <input type="text" class="form-control" id="id-tamu" name="id-tamu">
+              </div>
+              <div class="form-group">
+                <label for="instansi">Nama</label>
+                <input type="text" class="form-control" id="nama" name="nama">
               </div>
               <div class="form-group">
                 <label for="instansi">Instansi</label>
@@ -63,6 +114,7 @@
                 <label for="no-telp">No. Telp</label>
                 <input type="text" class="form-control" id="no-telp" name="no-telp">
               </div>
+              <input type="hidden" name="type" value="datang">
               <br>
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
@@ -73,22 +125,12 @@
         <div class="form-input col-md-12">
           <h2>Keluar</h2><br>
           <div class="form-datang">
-            <form>
+            <form method="POST" action="tamu.php">
               <div class="form-group">
-                <label for="no-kendaraan">No. Kendaraan</label>
-                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+                <label for="id-tamu">Tamu ID</label>
+                <input type="text" class="form-control" id="id-tamu" name="id-tamu">
               </div>
-              <div class="form-group">
-                <label for="jam-keluar">Waktu Keluar</label><br>
-                <div class="row waktu-input">
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="jam-datang" name="jam-keluar" min="0" max="23" placeholder="Jam">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="menit-datang" name="menit-keluar" min="0" max="59" placeholder="Menit">
-                  </div>
-                </div>
-              </div>
+              <input type="hidden" name="type" value="keluar">
               <br>
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
