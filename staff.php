@@ -42,10 +42,18 @@
       $staff_id = $_POST['id-staff'];
       $status = 'keluar';
 
+      $waktudatang = $conn->query("
+        SELECT JamMasuk
+        FROM TransaksiStaffTamu
+        WHERE StaffID = $staff_id
+        ORDER BY JamMasuk DESC
+        LIMIT 1
+      ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
+
       $sql = "
         UPDATE TransaksiStaffTamu
         SET JamKeluar = '$datex'
-        WHERE StaffID = $staff_id
+        WHERE StaffID = $staff_id AND JamMasuk = '$waktudatang'
       ";
       if (mysqli_query($conn, $sql)) {
 

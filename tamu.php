@@ -58,10 +58,18 @@
         WHERE TamuID = '$tamu_id'
       ")->fetch_array(MYSQLI_ASSOC)['ID'];
 
+      $waktudatang = $conn->query("
+        SELECT JamMasuk
+        FROM TransaksiStaffTamu
+        WHERE TamuID = $id
+        ORDER BY JamMasuk DESC
+        LIMIT 1
+      ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
+
       $sql = "
         UPDATE TransaksiStaffTamu
         SET JamKeluar = '$datex'
-        WHERE TamuID = $id
+        WHERE TamuID = $id AND JamMasuk = '$waktudatang'
       ";
       if (mysqli_query($conn, $sql)) {
 
