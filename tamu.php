@@ -6,6 +6,7 @@
   // GRANT ALL PRIVILEGES ON parkir.* TO 'parkir'@'localhost' WITH GRANT OPTION;
   $servername = "localhost";
   $username = "parkir";
+  $status = '';
   $password = "parkir";
   $dbname = "parkir";
   $conn = new mysqli($servername, $username, $password, $dbname);
@@ -18,6 +19,7 @@
     if ($_POST['type'] == "datang") {
     	date_default_timezone_set('Asia/Jakarta');
     	$datex = date('Y-m-d H:i:s');
+      $status = 'datang';
       $tamu_id = $_POST['id-tamu'];
       $nama = $_POST['nama'];
       $instansi = $_POST['instansi'];
@@ -35,10 +37,20 @@
           VALUES ('$datex', $last_id, '$kepentingan', 1)
         ");
       }
+
+      $result = $conn->prepare("
+        SELECT *
+        FROM lokasi
+        ORDER BY Slot DESC
+      ");
+      $result->execute();
+      $result->bind_result($lokasi_id, $lokasi, $kapasitas, $slot, $satpam_id);
+      $result->store_result();
     } else if ($_POST['type'] == "keluar") {
     	date_default_timezone_set('Asia/Jakarta');
       $datex = date('Y-m-d H:i:s');
       $tamu_id = $_POST['id-tamu'];
+      $status = 'keluar';
 
       $id = $conn->query("
         SELECT ID
@@ -88,6 +100,36 @@
     </nav>
 
     <div class="row">
+      <?php
+        if ($status == 'datang') {
+      ?>
+      <div class="form-input col-md-12 text-center" style="margin-bottom: 20px; padding-bottom: 10px">
+        <h2>Input Diterima</h2>
+        <p class="lead">Rekomendasi Tempat Parkir</p>
+        <table border="1" style="margin: auto" class="table-condensed table-hover">
+          <tbody>
+            <tr>
+              <th>Nama</th>
+              <th>Slot</th>
+              <th>Kapasistas</th>
+            </tr>
+            <?php
+              while ($result->fetch()) {
+                echo "<tr>";
+                echo "<td>$lokasi</td>";
+                echo "<td>$slot</td>";
+                echo "<td>$kapasitas</td>";
+                echo "</tr>";
+              }
+            ?>
+          </tbody>
+        </table>
+      </div>
+      <?php } else if ($status == 'keluar') { ?>
+        <div class="form-input col-md-12 text-center" style="margin-bottom: 20px; padding-bottom: 10px">
+          <h2>Berhasil Keluar</h2>
+        </div>
+      <?php } ?>
       <div class="col-md-6">
         <div class="form-input col-md-12">
           <h2>Datang</h2>

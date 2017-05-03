@@ -9,12 +9,53 @@
   $password = "parkir";
   $dbname = "parkir";
   $conn = new mysqli($servername, $username, $password, $dbname);
+  $message = '';
 
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
   }
 
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $lokasi = $_POST["tempat-parkir"];
+    $type = $_POST["type"];
+    $res = $conn->query("
+      SELECT * FROM lokasi WHERE Lokasi = '$lokasi'
+    ");
+    $slot = $res->fetch_array(MYSQLI_ASSOC)['Slot'];
+    $capacity = $res->fetch_array(MYSQLI_ASSOC)['Kapasitas'];
 
+    if ($type == 'datang') {
+      if ($slot == 0) {
+        $message = 'Error: Slot Parkir Habis';
+      } else {
+        $slot -= 1;
+        $sql = "
+          UPDATE Lokasi
+          SET Slot = $slot
+          WHERE Lokasi = '$lokasi'
+        ";
+        if (!mysqli_query($conn, $sql)) {
+          echo "Error updating record: " . mysqli_error($conn);
+        }
+        $message = 'Update Berhasil';
+      }
+    } else { // 'keluar'
+      if ($slot == $capacity) {
+        $message = 'Error: Slot Parkir = Kapasitas';
+      } else {
+        $slot += 1;
+        $sql = "
+          UPDATE Lokasi
+          SET Slot = $slot
+          WHERE Lokasi = '$lokasi'
+        ";
+        if (!mysqli_query($conn, $sql)) {
+          echo "Error updating record: " . mysqli_error($conn);
+        }
+        $message = 'Update Berhasil';
+      }
+    }
+  }
 ?>
 
 <!-- html section -->
@@ -45,28 +86,32 @@
 
     <!-- masuk parkir -->
     <div class="row">
+      <?php if ($message != '') { ?>
+      <div class="form-input col-md-12 text-center" style="margin-bottom: 20px; padding-bottom: 10px">
+        <h2><?php echo $message; ?></h2>
+      </div>
+      <?php } ?>
       <div class="form-input col-md-12">
         <h2>Masuk Parkir</h2>
         <br>
         <div class="form-parkir">
-          <form>
+          <form method="POST" action="parkir.php">
             <div class="form-group">
               <label for="tempat-parkir">Tempat Parkir</label>
               <select class="form-control" name="tempat-parkir" id="tempat-parkir">
                 <?php
-                  $result = $conn->query("SELECT Lokasi FROM lokasi ORDER BY Lokasi");
-
+                  $result = $conn->query("SELECT * FROM lokasi ORDER BY Lokasi");
                   if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                      echo "<option value=" . $row['Lokasi'] . ">" . $row['Lokasi'] . "</option>";
+                      echo "<option value=\"" . $row['Lokasi'] . "\">" . $row['Lokasi'] . " | Slot: " . $row['Slot'] . " | Kapasitas: " . $row['Kapasitas'] . "</option>";
                     }
                   }
                 ?>
               </select>
             </div>
             <div class="form-group">
-              <label class="radio-inline"><input type="radio" name="type">Datang</label>
-              <label class="radio-inline"><input type="radio" name="type">Keluar</label>
+              <label class="radio-inline"><input type="radio" value="datang" name="type" checked>Datang</label>
+              <label class="radio-inline"><input type="radio" value="keluar" name="type">Keluar</label>
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
