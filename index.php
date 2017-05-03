@@ -9,6 +9,7 @@
   $password = "parkir";
   $dbname = "parkir";
   $conn = new mysqli($servername, $username, $password, $dbname);
+  $error = '';
 
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -24,20 +25,13 @@
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $user_id = $conn->query("
-      SELECT UserID FROM Users
-      WHERE Username = '$username' AND Password = '$password'
-    ")->fetch_array(MYSQLI_ASSOC)['UserID'];
-
-    if ($user_id) { // logged in
-      $_SESSION['username'] = $username;
-      header("Location: parkir.php");
-      $conn->close();
-      die();
+    if ($username == 'petugas' && $password == 'petugas') {
+      header('Location: umum.php');
+    } else if ($username == 'satpam' && $password == 'satpam') {
+      header('Location: parkir.php');
     } else {
-      $error = true;
+      $error = 'Username/Password Salah';
     }
-    $conn->close();
   }
 ?>
 
@@ -64,6 +58,11 @@
     <!-- login -->
     <div class="login">
       <form method="POST" action="index.php">
+        <?php
+          if ($error != '') {
+            echo '<h4 class="text-center" style="color: red;">' . $error . '</h4>';
+          }
+        ?>
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" class="form-control" id="username" name="username">

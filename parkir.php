@@ -75,7 +75,7 @@
           <a class="navbar-brand" href="#"><img src="logo.png"></a>
         </div>
         <ul class="nav navbar-nav" id="logout">
-          <li><a href="index.php">Logout</a></li>
+          <li><a href="logout.php">Logout</a></li>
         </ul>
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Parkir</a></li>
