@@ -91,17 +91,6 @@
                 <label for="no-kendaraan">No. Kendaraan</label>
                 <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
               </div>
-              <div class="form-group">
-                <label for="jam-datang">Waktu Kedatangan</label><br>
-                <div class="row waktu-input">
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="jam-datang" name="jam-datang" min="0" max="23" placeholder="Jam">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="menit-datang" name="menit-datang" min="0" max="59" placeholder="Menit">
-                  </div>
-                </div>
-              </div>
               <br>
               <input type="hidden" name="type" value="datang">
               <button type="submit" class="btn btn-default">Submit</button>
@@ -117,17 +106,6 @@
               <div class="form-group">
                 <label for="no-kendaraan">No. Kendaraan</label>
                 <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
-              </div>
-              <div class="form-group">
-                <label for="jam-keluar">Waktu Keluar</label><br>
-                <div class="row waktu-input">
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="jam-datang" name="jam-keluar" min="0" max="23" placeholder="Jam">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="number" class="form-control" id="menit-datang" name="menit-keluar" min="0" max="59" placeholder="Menit">
-                  </div>
-                </div>
               </div>
               <br>
               <input type="hidden" name="type" value="keluar">

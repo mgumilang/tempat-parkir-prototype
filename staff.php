@@ -20,12 +20,13 @@
       $status = 'datang';
     	date_default_timezone_set('Asia/Jakarta');
     	$datex = date('Y-m-d H:i:s');
+      $no_plat = $_POST['no-kendaraan'];
       $staff_id = $_POST['id-staff'];
       $kepentingan = $_POST['kepentingan'];
 
       $res_tamu_transaksi = $conn->query("
-        INSERT INTO TransaksiStaffTamu(JamMasuk, StaffID, Kepentingan, PetugasID)
-        VALUES ('$datex', $staff_id, '$kepentingan', 1)
+        INSERT INTO TransaksiStaffTamu(JamMasuk, StaffID, Kepentingan, PetugasID, NomorPlat)
+        VALUES ('$datex', $staff_id, '$kepentingan', 1, '$no_plat')
       ");
 
       $result = $conn->prepare("
@@ -39,13 +40,13 @@
     } else if ($_POST['type'] == "keluar") {
     	date_default_timezone_set('Asia/Jakarta');
       $datex = date('Y-m-d H:i:s');
-      $staff_id = $_POST['id-staff'];
+      $no_plat = $_POST['no-kendaraan'];
       $status = 'keluar';
 
       $waktudatang = $conn->query("
         SELECT JamMasuk
-        FROM TransaksiStaffTamu
-        WHERE StaffID = $staff_id
+        FROM transaksistafftamu
+        WHERE NomorPlat = '$no_plat'
         ORDER BY JamMasuk DESC
         LIMIT 1
       ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
@@ -53,7 +54,7 @@
       $sql = "
         UPDATE TransaksiStaffTamu
         SET JamKeluar = '$datex'
-        WHERE StaffID = $staff_id AND JamMasuk = '$waktudatang'
+        WHERE NomorPlat = '$no_plat' AND JamMasuk = '$waktudatang'
       ";
       if (mysqli_query($conn, $sql)) {
 
@@ -130,6 +131,10 @@
           <div class="form-datang">
             <form method="POST" action="staff.php">
               <div class="form-group">
+                <label for="no-kendaraan">No. Kendaraan</label>
+                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+              </div>
+              <div class="form-group">
                 <label for="id-staff">ID Staff</label>
                 <input type="text" class="form-control" id="id-staff" name="id-staff">
               </div>
@@ -150,10 +155,9 @@
           <div class="form-datang">
             <form method="POST" action="staff.php">
               <div class="form-group">
-                <label for="no-kendaraan">ID Staff</label>
-                <input type="text" class="form-control" id="id-staff" name="id-staff">
-              </div>
-              <input type="hidden" name="type" value="keluar">
+                <label for="no-kendaraan">No. Kendaraan</label>
+                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+              </div><input type="hidden" name="type" value="keluar">
               <br>
               <button type="submit" class="btn btn-default">Submit</button>
             </form>

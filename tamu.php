@@ -20,6 +20,7 @@
     	date_default_timezone_set('Asia/Jakarta');
     	$datex = date('Y-m-d H:i:s');
       $status = 'datang';
+      $no_plat = $_POST['no-kendaraan'];
       $tamu_id = $_POST['id-tamu'];
       $nama = $_POST['nama'];
       $instansi = $_POST['instansi'];
@@ -33,8 +34,8 @@
       if ($res_tamu) {
         $last_id = $conn->insert_id;
         $res_tamu_transaksi = $conn->query("
-          INSERT INTO TransaksiStaffTamu(JamMasuk, TamuID, Kepentingan, PetugasID)
-          VALUES ('$datex', $last_id, '$kepentingan', 1)
+          INSERT INTO TransaksiStaffTamu(JamMasuk, TamuID, Kepentingan, PetugasID, NomorPlat)
+          VALUES ('$datex', $last_id, '$kepentingan', 1, '$no_plat')
         ");
       }
 
@@ -49,19 +50,13 @@
     } else if ($_POST['type'] == "keluar") {
     	date_default_timezone_set('Asia/Jakarta');
       $datex = date('Y-m-d H:i:s');
-      $tamu_id = $_POST['id-tamu'];
+      $no_plat = $_POST['no-kendaraan'];
       $status = 'keluar';
-
-      $id = $conn->query("
-        SELECT ID
-        FROM Tamu
-        WHERE TamuID = '$tamu_id'
-      ")->fetch_array(MYSQLI_ASSOC)['ID'];
 
       $waktudatang = $conn->query("
         SELECT JamMasuk
         FROM TransaksiStaffTamu
-        WHERE TamuID = $id
+        WHERE NomorPlat = '$no_plat'
         ORDER BY JamMasuk DESC
         LIMIT 1
       ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
@@ -146,6 +141,10 @@
           <div class="form-datang">
             <form method="POST" action="tamu.php">
               <div class="form-group">
+                <label for="no-kendaraan">No. Kendaraan</label>
+                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+              </div>
+              <div class="form-group">
                 <label for="id-tamu">Tamu ID</label>
                 <input type="text" class="form-control" id="id-tamu" name="id-tamu">
               </div>
@@ -178,8 +177,8 @@
           <div class="form-datang">
             <form method="POST" action="tamu.php">
               <div class="form-group">
-                <label for="id-tamu">Tamu ID</label>
-                <input type="text" class="form-control" id="id-tamu" name="id-tamu">
+                <label for="no-kendaraan">No. Kendaraan</label>
+                <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
               </div>
               <input type="hidden" name="type" value="keluar">
               <br>

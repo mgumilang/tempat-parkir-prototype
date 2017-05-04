@@ -16,15 +16,24 @@
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = $_POST['status'];
+    $no_plat = $_POST['no-kendaraan'];
     $result = $conn->query("INSERT INTO pelanggaran(SatpamID, Status)
       VALUES (1, '$status')
     ");
 
+    $waktudatang = $conn->query("
+      SELECT JamMasuk
+      FROM TransaksiStaffTamu
+      WHERE NomorPlat = '$no_plat'
+      ORDER BY JamMasuk DESC
+      LIMIT 1
+    ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
+
     $id = $conn->query("SELECT PelanggaranID FROM pelanggaran ORDER BY PelanggaranID DESC LIMIT 1")->fetch_array(MYSQLI_ASSOC)['PelanggaranID'];
-    $idtrans = $_POST['ID'];
-    $result = $conn->query("UPDATE transaksistafftamu
+    $result = $conn->query("
+      UPDATE transaksistafftamu
       SET PelanggaranID = '$id'
-      WHERE TransaksiStaffTamuID = '$idtrans'
+      WHERE JamMasuk = '$waktudatang' AND NomorPlat = '$no_plat'
     ");
   }
 ?>
@@ -63,8 +72,8 @@
         <div class="form-parkir">
           <form method="POST" action="pelanggaran.php">
             <div class="form-group">
-              <label for="ID">ID</label>
-              <input type="text" class="form-control" id="ID" name="ID">
+              <label for="no-kendaraan">No. Kendaraan</label>
+              <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
             </div>
             <div class="form-group">
               <label for="pelanggaran">Status Pelanggaran</label>
@@ -89,7 +98,7 @@
     <!-- Daftar pelanggaran -->
     <div class="row">
       <div class="form-input col-md-12">
-        <h2>Daftar Pelru Dikunci</h2>
+        <h2>Daftar Perlu Dikunci</h2>
         <br>
         <div class="container-fluid">
           <table class="table-condensed table-hover">

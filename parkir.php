@@ -36,6 +36,31 @@
         ";
         if (!mysqli_query($conn, $sql)) {
           echo "Error updating record: " . mysqli_error($conn);
+        } else {
+          $no_plat = $_POST['no-kendaraan'];
+          $waktudatang = $conn->query("
+            SELECT JamMasuk
+            FROM TransaksiStaffTamu
+            WHERE NomorPlat = '$no_plat'
+            ORDER BY JamMasuk DESC
+            LIMIT 1
+          ")->fetch_array(MYSQLI_ASSOC)['JamMasuk'];
+
+          $lokasi_id = $conn->query("
+            SELECT LokasiID
+            FROM lokasi
+            WHERE Lokasi = '$lokasi'
+          ")->fetch_array(MYSQLI_ASSOC)['LokasiID'];
+
+          $sql = "
+            UPDATE transaksistafftamu
+            SET LokasiID = $lokasi_id
+            WHERE NomorPlat = '$no_plat' AND JamMasuk = '$waktudatang'
+          ";
+
+          if (!mysqli_query($conn, $sql)) {
+            echo "Error updating record: " . mysqli_error($conn);
+          }
         }
         $message = 'Update Berhasil';
       }
@@ -92,10 +117,14 @@
       </div>
       <?php } ?>
       <div class="form-input col-md-12">
-        <h2>Masuk Parkir</h2>
+        <h2>Masuk/Keluar Parkir</h2>
         <br>
         <div class="form-parkir">
           <form method="POST" action="parkir.php">
+            <div class="form-group">
+              <label for="no-kendaraan">No. Kendaraan</label>
+              <input type="text" class="form-control" id="no-kendaraan" name="no-kendaraan">
+            </div>
             <div class="form-group">
               <label for="tempat-parkir">Tempat Parkir</label>
               <select class="form-control" name="tempat-parkir" id="tempat-parkir">
